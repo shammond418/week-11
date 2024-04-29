@@ -1,0 +1,45 @@
+section .text
+        global _start
+_start:
+        mov eax, 65
+        mov [tmp], eax
+        printer:
+        mov [res], eax
+        mov ecx,res
+        mov edx,1       ;
+        mov ebx,1       ;
+        mov eax,4       ;system call (sys_write)
+        int 0x80  
+
+        mov eax, [tmp]
+        inc eax
+        mov [tmp], eax
+        mov eax, 10
+        mov [res], eax
+        mov ecx, res
+        mov edx, 1
+        mov ebx, 1
+        mov eax, 4
+        int 0x80
+        call incr
+        call decr
+        loop printer
+incr:
+        mov eax, [tmp]
+        add eax, 1
+        mov [tmp], eax
+        ret
+decr:
+        mov eax, [i]
+        sub eax, 1
+        mov [i], eax
+        jz exit
+        ret
+exit:
+        mov eax, 1
+        int 0x80
+segment .bss
+        res resb 1
+        tmp resb 1
+section .data
+        i dd 26
